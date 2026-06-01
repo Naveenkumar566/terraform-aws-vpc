@@ -16,8 +16,9 @@ resource "aws_internet_gateway" "gw" {
 } 
 
 resource "aws_subnet" "main" {
-  vpc_id     = aws_vpc.main.id
-  cidr_block = var.public_subnet_cidrs
+  count = length(var.public_subnet_cidrs)
+  vpc_id     = aws_vpc.main.id  
+  cidr_block = var.public_subnet_cidrs[count.index]
 
-  tags = 
+  tags = var.public_subnet_tags
 }

@@ -18,4 +18,11 @@ locals {
         },
         var.igw_tags
     )
+    public_subnet_tags = merge(
+        local.common_tags,
+        {
+            Name = "${var.project}-${var.environment}"
+        },
+        var.public_subnet_tags,
+    )
 }
