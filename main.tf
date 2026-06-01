@@ -11,6 +11,13 @@ resource "aws_vpc" "main" {
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id #association
 
-  tags = var.igw_tags
+  tags = local.igw_final_tags
   
 } 
+
+resource "aws_subnet" "main" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = var.public_subnet_cidrs
+
+  tags = 
+}
