@@ -7,3 +7,10 @@ resource "aws_vpc" "main" {
     Name = "${var.project}-${var.environment}"
   }
 }
+
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.main.id #association
+
+  tags = var.igw_tags
+  
+} 
