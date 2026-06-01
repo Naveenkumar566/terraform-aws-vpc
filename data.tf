@@ -3,13 +3,12 @@ data "aws_availability_zones" "available" {
 }
 
 data "aws_vpc" "default" {
-    dafault = true
+    default = true
 }
-
 data "aws_route_table" "default" {
     vpc_id = data.aws_vpc.default.id
     filter {
-        name = "assocation.main"
+        name = "association.main"
         values = ["true"]
     }
 }
