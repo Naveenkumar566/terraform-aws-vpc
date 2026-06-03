@@ -8,6 +8,7 @@ resource "aws_vpc" "main" {
   }
 }
 
+#IGW
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id #association
 
@@ -15,6 +16,8 @@ resource "aws_internet_gateway" "gw" {
   
 } 
 
+
+#subnets
 resource "aws_subnet" "public" {
   count = length(var.public_subnet_cidrs)
   vpc_id     = aws_vpc.main.id  
@@ -65,3 +68,43 @@ resource "aws_subnet" "database" {
     var.database_subnet_tags
   )
 }
+
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.example.id
+  
+  tags = merge(
+    local.common_tags,
+    # roboshop=dev-public
+    {
+      Name = "${var.project}-${var.environment}-public"
+    },
+    var.public_route_table_tags
+  )
+}
+
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.example.id
+  
+  tags = merge(
+    local.common_tags,
+    # roboshop=dev-private
+    {
+      Name = "${var.project}-${var.environment}-private"
+    },
+    var.private_route_table_tags
+  )
+}
+
+resource "aws_route_table" "database" {
+  vpc_id = aws_vpc.example.id
+  
+  tags = merge(
+    local.common_tags,
+    # roboshop=dev-database
+    {
+      Name = "${var.project}-${var.environment}-database"
+    },
+    var.database_route_table_tags
+  )
+}
+
