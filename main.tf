@@ -129,6 +129,7 @@ resource "aws_eip" "nat" {
   )
 }
 
+#NAT gateways
 resource "aws_nat_gateway" "main" {
   allocation_id = aws_eip.nat.id
   subnet_id     = aws_subnet.public[0].id #This going to be created in US-east-1a AZ zone and [0] shows the postion.
@@ -157,10 +158,23 @@ resource "aws_route" "database" {
   nat_gateway_id = aws_nat_gateway.main.id
 }
 
+#Associations
 resource "aws_route_table_association" "public" {
+  count = length(var.public_subnet_cidrs)
   subnet_id      = aws_subnet.public.id
   route_table_id = aws_route_table.public.id
 }
 
+resource "aws_route_table_association" "private" {
+  count = length(var.private_subnet_cidrs)
+  subnet_id      = aws_subnet.private.id
+  route_table_id = aws_route_table.private.id
+}
+
+resource "aws_route_table_association" "database" {
+  count = length(var.database_subnet_cidrs)
+  subnet_id      = aws_subnet.database.id
+  route_table_id = aws_route_table.database.id
+}
 
 
