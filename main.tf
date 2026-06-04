@@ -161,20 +161,49 @@ resource "aws_route" "database" {
 #Associations
 resource "aws_route_table_association" "public" {
   count = length(var.public_subnet_cidrs)
-  subnet_id      = aws_subnet.public.id
+  subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id
 }
 
 resource "aws_route_table_association" "private" {
   count = length(var.private_subnet_cidrs)
-  subnet_id      = aws_subnet.private.id
+  subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private.id
 }
 
 resource "aws_route_table_association" "database" {
   count = length(var.database_subnet_cidrs)
-  subnet_id      = aws_subnet.database.id
+  subnet_id      = aws_subnet.database[count.index].id
   route_table_id = aws_route_table.database.id
+}
+
+resource "aws_vpc_peering_connection" "default" {
+  count = var.is_peering_required ? 1:0     #Creating VPC depends on variable if it is 1 it creates, If it is 0 itbwill not create
+  
+  #peer_owner_id = var.peer_owner_id        This option can be used only when we are peering VPC with other account.
+  
+  peer_vpc_id   = data.aws_vpc.default.id    #this is VPC peering id which is accepting the peering. : Acceptor
+
+
+  vpc_id        = aws_vpc.main.id            #requestor id
+
+  auto_accept   = true                       #if it is in same region 
+
+  accepter {
+    allow_remote_vpc_dns_resolution = true
+  }
+
+  requester {
+    allow_remote_vpc_dns_resolution = true
+  }
+
+   tags = merge(
+    local.common_tags,
+    # roboshop=dev
+    {
+      Name = "${var.project}-${var.environment}-default"
+    }
+  )
 }
 
 
