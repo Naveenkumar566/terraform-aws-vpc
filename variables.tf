@@ -1,6 +1,6 @@
 variable "vpc_cidr" {
   type    = string
-  default = "10.0.0.0/16"
+  default = "10.1.0.0/16"
 }
 
 variable "project" {
@@ -25,7 +25,7 @@ variable "igw_tags" {
 
 variable "public_subnet_cidrs" {
   type = list
-  default = ["10.0.4.0/24", "10.0.6.0/24"]
+  default = ["10.1.4.0/24", "10.1.6.0/24"]
 }
 
 variable "public_subnet_tags" {
@@ -35,7 +35,7 @@ variable "public_subnet_tags" {
 
 variable "private_subnet_cidrs" {
   type = list
-  default = ["10.0.11.0/24", "10.0.12.0/24"]
+  default = ["10.1.11.0/24", "10.1.12.0/24"]
 }
 
 variable "private_subnet_tags" {
@@ -45,7 +45,7 @@ variable "private_subnet_tags" {
 
 variable "database_subnet_cidrs" {
   type = list
-  default = ["10.0.21.0/24", "10.0.22.0/24"]
+  default = ["10.1.21.0/24", "10.1.22.0/24"]
 }
 
 variable "database_subnet_tags" {
