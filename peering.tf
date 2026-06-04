@@ -32,14 +32,14 @@ resource "aws_route" "public_peering" {
   count = var.is_peering_required ? 1:0                                          #if user says it is not required then it will not be created.
   route_table_id            = aws_route_table.public.id                          # peering with public subnet id
   destination_cidr_block    = data.aws_vpc.default.cidr_block                    #from default VPC,cidr_block attribute is exported
-  vpc_peering_connection_id = aws_vpc_peering_connection.default[count.index]    #This shows the peering is configured from default vpc peering connection 
+  vpc_peering_connection_id = aws_vpc_peering_connection.default[count.index].id    #This shows the peering is configured from default vpc peering connection 
 }
 
 resource "aws_route" "private_peering" {
   count = var.is_peering_required ? 1:0                               
   route_table_id            = aws_route_table.private.id               
   destination_cidr_block    = data.aws_vpc.default.cidr_block          
-  vpc_peering_connection_id = aws_vpc_peering_connection.default[count.index] 
+  vpc_peering_connection_id = aws_vpc_peering_connection.default[count.index].id 
 }
   
 
@@ -47,12 +47,12 @@ resource "aws_route" "database_peering" {
   count = var.is_peering_required ? 1:0                               
   route_table_id            = aws_route_table.database.id                
   destination_cidr_block    = data.aws_vpc.default.cidr_block          
-  vpc_peering_connection_id = aws_vpc_peering_connection.default[count.index]     
+  vpc_peering_connection_id = aws_vpc_peering_connection.default[count.index].id    
 }
 
 resource "aws_route" "default_peering" {
   count = var.is_peering_required ? 1:0                                 
   route_table_id            = aws_route_table.private.id                
   destination_cidr_block    = var.vpc_cidr                             
-  vpc_peering_connection_id = aws_vpc_peering_connection.default[count.index]     
+  vpc_peering_connection_id = aws_vpc_peering_connection.default[count.index].id   
 }
