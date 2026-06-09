@@ -13,7 +13,7 @@ variable "environment" {
   default = "dev"
 }
 
-variable   "vpc_tags" {
+variable "vpc_tags" {
     type = map
     default = {}
 }
