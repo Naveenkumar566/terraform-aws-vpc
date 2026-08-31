@@ -188,4 +188,3 @@ resource "aws_db_subnet_group" "roboshop" {
     }
   )
 }
-
